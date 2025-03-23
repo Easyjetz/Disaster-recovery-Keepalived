@@ -1,0 +1,25 @@
+global_defs {
+    enable_script_security
+}
+
+vrrp_script check_web {
+    script "/usr/local/bin/check_nginx.sh"
+    interval 3
+}
+
+vrrp_instance VI_1 {
+    state BACKUP
+    interface eth0
+    virtual_router_id 250
+    priority 200
+    advert_int 1
+
+    virtual_ipaddress {
+        172.16.20.250/24
+    }
+
+    track_script {
+        check_web
+    }
+
+}
